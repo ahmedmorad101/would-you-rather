@@ -1,0 +1,50 @@
+body {
+    height: auto;
+    background-color: #fefae0;
+}
+
+.ui.divider {
+    margin: 2px 0!important;
+}
+
+.app-container {
+    padding: 5px;
+    padding-top: 50px;
+    min-height: calc(100vh - 50px);
+}
+
+.content-color{
+    background-color: #eaf8ff!important;
+}
+
+
+
+.background-color{
+    background-color: #fefae0!important;
+}
+
+.background-color > .tab,.background-color > .menu{
+    background-color: transparent!important;
+}
+
+.circle-image{
+
+    background-color: #e9edc9;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    
+
+}
+
+
+.circle-image > img{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}

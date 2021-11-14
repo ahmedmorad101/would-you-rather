@@ -1,0 +1,5 @@
+export const LOGIN = 'LOGIN'
+export const LOGOUT = 'LOGOUT'
+export const ADD_QUESTION = 'ADD_QUESTION'
+export const ANSWER_QUESTION = 'ANSWER_QUESTION'
+export const TOGGLE_SHOW_USERS = 'TOGGLE_SHOW_USERS'
