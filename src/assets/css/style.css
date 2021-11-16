@@ -1,6 +1,6 @@
 body {
     height: auto;
-    background-color: #fefae0;
+    background-color: #fff;
 }
 
 .ui.divider {
@@ -14,13 +14,13 @@ body {
 }
 
 .content-color{
-    background-color: #effaff!important;
+    background-color: #fff!important;
 }
 
 
 
 .background-color{
-    background-color: #fefae0!important;
+    background-color: #fff!important;
 }
 
 .background-color > .tab,.background-color > .menu{

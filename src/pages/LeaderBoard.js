@@ -25,9 +25,10 @@ const LeaderBoard = () => {
         <Segment className='content-color'>
             <Header as='h2'>
                 Leader Board
+                <Divider/>
             </Header>
-            <Divider />
-            <CardGroup>
+
+            <CardGroup >
                 {questions.map((question) => {
                     const questionUser = users.find((u) => u.username === question.addedBy)
                     const firstOptionCount = answers.filter((a) => a.id === question.id && a.answer === 'firstOption').length
