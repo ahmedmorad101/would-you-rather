@@ -3,14 +3,12 @@ import Moment from 'react-moment'
 import { useDispatch, useSelector } from 'react-redux'
 import { Accordion, Card, CardGroup, Divider, Header, Icon, Image, Progress, Segment } from 'semantic-ui-react'
 import NoQuestions from '../components/NoQuestions'
-
-import { users } from '../data/users'
 import { toggleShowUsers } from '../store/actions'
 
 const LeaderBoard = () => {
     const questions = useSelector(state => state.questions)
-    const answers = useSelector(state => state.answers)
-    const currentUser = useSelector(state => state.user.username)
+    const currentUser = useSelector(state => state.user)
+    const users = useSelector(state => state.users)
     const dispatch = useDispatch()
 
     const handleClick = (e, props) => {
@@ -29,14 +27,12 @@ const LeaderBoard = () => {
             </Header>
 
             <CardGroup >
-                {questions.map((question) => {
-                    const questionUser = users.find((u) => u.username === question.addedBy)
-                    const firstOptionCount = answers.filter((a) => a.id === question.id && a.answer === 'firstOption').length
-                    const secondOptionCount = answers.filter((a) => a.id === question.id && a.answer === 'secondOption').length
+                {Object.values(questions).map((question) => {
+                    const questionUser = users[question.author]
+                    const firstOptionCount = question.optionOne.votes.length
+                    const secondOptionCount = question.optionTwo.votes.length
                     const totalCount = firstOptionCount + secondOptionCount
 
-                    console.log(firstOptionCount)
-                    console.log(secondOptionCount)
 
                     const firstOptionPercent = totalCount > 0 ? Math.round((firstOptionCount / totalCount) * 10000) / 100 : 0
                     const secondOptionPercent = totalCount > 0 ? Math.round((secondOptionCount / totalCount) * 10000) / 100 : 0
@@ -46,38 +42,52 @@ const LeaderBoard = () => {
                                 <Image
                                     floated='right'
                                     size='mini'
-                                    src={questionUser.image}
+                                    src={questionUser.avatarURL}
                                 />
                             }
-                            <Card.Header>{question.addedBy} Ask ?</Card.Header>
+                            <Card.Header>{questionUser.name} Ask ?</Card.Header>
                             <Card.Meta><Moment format="YYYY/MM/DD">{question.addedDate}</Moment></Card.Meta>
                             <Card.Description>
-                                would you rather <strong>{question.firstOption}</strong> or <strong>{question.secondOption}</strong>
+                                would you rather <strong>{question.optionOne.text}</strong> or <strong>{question.optionTwo.text}</strong>
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
-                            <Progress percent={firstOptionPercent} progress label={question.firstOption} size='small' color='blue'/>
-                            <Progress percent={secondOptionPercent} progress label={question.secondOption} size='small' color='olive' />
-                            {answers.filter(e => e.id === question.id).length > 0 &&
+                            <Progress percent={firstOptionPercent} progress label={question.optionOne.text} size='small' color='blue'/>
+                            <Progress percent={secondOptionPercent} progress label={question.optionTwo.text} size='small' color='olive' />
+                            {totalCount > 0 &&
                                 <Accordion fluid >
                                     <Accordion.Title
-                                        active={question.showAnswersForUser===currentUser}
+                                        active={question.showAnswers===currentUser.id}
                                         index={question.id}
                                         onClick={handleClick}
                                     >
                                         <Icon name='dropdown' />
                                         Show Answers
                                     </Accordion.Title>
-                                    <Accordion.Content active={question.showAnswersForUser===currentUser}>
+                                    <Accordion.Content active={question.showAnswers===currentUser.id}>
                                         {
-                                            answers.filter(e => e.id === question.id).map(m => {
-                                                let user = users.find(u => u.username === m.user)
+                                            question.optionOne.votes.map(m => {
+                                                let user = users[m]
                                                 return (
-                                                    <div key={m.user} style={{ marginBottom: '6px' }}>
-                                                        <Image avatar src={user.image} size="mini" spaced /> {user.username === currentUser ? 'Your' : user.username} answer : <strong>{m.answer === 'firstOption' ? question.firstOption : question.secondOption}</strong>
+                                                    <div key={user.id} style={{ marginBottom: '6px' }}>
+                                                        <Image avatar src={user.avatarURL} size="mini" spaced /> 
+                                                        {user.id === currentUser.id ? 'Your' : user.name} answer : <strong>{user.answers[question.id] === 'optionOne' ? question.optionOne.text : question.optionTwo.text}</strong>
                                                     </div>
                                                 )
                                             })
+                                            
+                                        }
+                                        {
+                                            question.optionTwo.votes.map(m => {
+                                                let user = users[m]
+                                                return (
+                                                    <div key={user.id} style={{ marginBottom: '6px' }}>
+                                                        <Image avatar src={user.avatarURL} size="mini" spaced /> 
+                                                        {user.id === currentUser.id ? 'Your' : user.name} answer : <strong>{user.answers[question.id] === 'optionOne' ? question.optionOne.text : question.optionTwo.text}</strong>
+                                                    </div>
+                                                )
+                                            })
+                                            
                                         }
                                     </Accordion.Content>
                                 </Accordion>}

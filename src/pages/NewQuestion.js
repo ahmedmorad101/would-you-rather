@@ -1,24 +1,30 @@
 import React from 'react'
 import { Button, Divider, Grid, Header, Segment } from 'semantic-ui-react'
 import { Form } from 'formsy-semantic-ui-react'
-import { useDispatch } from 'react-redux'
-import { addQuestion } from '../store/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import { saveQuestionAsync } from '../store/actions'
 import { useNavigate } from 'react-router'
 
 const NewQuestion = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch();
+
+    const savingQuestion = useSelector(state => state.savingQuestion)
+    const user = useSelector(state => state.user)
+
     const onValidSubmit = (formData) => {
-        
-        dispatch(addQuestion(formData))
-        navigate("/")
+
+        let question = { author: user.id, optionOneText: formData.optionOneText, optionTwoText: formData.optionTwoText }
+
+        dispatch(saveQuestionAsync(question)).then(() => navigate("/"))
+
 
     }
     return (
         <Grid textAlign='center'>
             <Grid.Column textAlign='left' style={{ maxWidth: '500px' }}>
-                <Segment raised  className='content-color'>
+                <Segment raised className='content-color'>
                     <Header as='h3' color='teal'>
                         Create Your Question
                     </Header>
@@ -27,19 +33,19 @@ const NewQuestion = () => {
                         <Form.Input
                             instantValidation={false}
                             required
-                            name="firstOption"
-                            label="First Option"
+                            name="optionOneText"
+                            label="Option One"
 
                         />
 
                         <Form.Input
                             instantValidation={false}
                             required
-                            name="secondOption"
-                            label="Second Option"
+                            name="optionTwoText"
+                            label="Option Two"
 
                         />
-                        <Button type='submit' color='blue' fluid>Save</Button>
+                        <Button type='submit' color='blue' fluid loading={savingQuestion}>Save</Button>
                     </Form>
                 </Segment>
             </Grid.Column>

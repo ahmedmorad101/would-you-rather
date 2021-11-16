@@ -4,17 +4,16 @@ import { Button, Card, Divider, Header, Icon, Image, Message, Modal, Segment, Ta
 import * as _ from 'lodash'
 
 
-import { users } from '../data/users'
 import Moment from 'react-moment'
 import { Form } from 'formsy-semantic-ui-react'
-import { answerQuestion } from '../store/actions'
-import NoQuestions from '../components/NoQuestions'
+import {  answerQuestionAsync } from '../store/actions'
 
 const Home = () => {
 
     const questions = useSelector((state) => state.questions)
-    const answers = useSelector((state) => state.answers)
     const user = useSelector((state) => state.user)
+    const users = useSelector((state) => state.users)
+    const savingAnswer = useSelector((state) => state.savingAnswer)
 
     const [showModal, setShowModal] = useState(false)
     const [selected, setSelected] = useState()
@@ -31,13 +30,14 @@ const Home = () => {
     }
 
     const answer = () => {
-        dispatch(answerQuestion(questionToAnswer.id, selected))
-        setShowModal(false)
+        dispatch(answerQuestionAsync(user.id, questionToAnswer.id, selected)).then(() => setShowModal(false))
+
+
     }
 
     const unansweredQuestions = () => {
-        const userAnswers = answers.filter((i) => i.user === user.username)
-        const remainingQuestions = questions.filter((item) => !_.includes(userAnswers.map(a => a.id), item.id))
+        const userAnswers = Object.keys(user.answers)
+        const remainingQuestions = Object.values(questions).filter((item) => !_.includes(userAnswers, item.id))
 
         if (questions.length !== 0 && remainingQuestions.length === 0) {
 
@@ -54,20 +54,20 @@ const Home = () => {
         return (<Card.Group textAlign='center'>
             {
                 remainingQuestions.map((question) => {
-                    const questionUser = users.find((u) => u.username === question.addedBy)
+                    const questionUser = users[question.author]
                     return <Card key={question.id} fluid className='content-color'>
                         <Card.Content>
                             {questionUser &&
                                 <Image
                                     floated='right'
                                     size='mini'
-                                    src={questionUser.image}
+                                    src={questionUser.avatarURL}
                                 />
                             }
-                            <Card.Header>{question.addedBy} Ask ?</Card.Header>
+                            <Card.Header>{questionUser.name} Ask ?</Card.Header>
                             <Card.Meta><Moment format="YYYY/MM/DD">{question.addedDate}</Moment></Card.Meta>
                             <Card.Description>
-                                would you rather <strong>{question.firstOption}</strong> or <strong>{question.secondOption}</strong>
+                                would you rather <strong>{question.optionOne.text}</strong> or <strong>{question.optionTwo.text}</strong>
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
@@ -86,9 +86,12 @@ const Home = () => {
     }
 
     const answeredQuestions = () => {
-        const userAnswers = answers.filter((i) => i.user === user.username)
 
-        if (questions.length !== 0 && userAnswers.length === 0) {
+        const userAnswers = Object.keys(user.answers)
+
+        const answeredQuestions = Object.values(questions).filter((item) => _.includes(Object.keys(user.answers), item.id))
+
+        if (questions && userAnswers.length === 0) {
 
             return (
                 <Message negative fluid>
@@ -102,25 +105,27 @@ const Home = () => {
         }
         return (
             <Card.Group textAlign='center'>
-                {userAnswers.map((answer) => {
-                    const question = questions.find(q => q.id === answer.id)
-                    const questionUser = users.find((u) => u.username === question.addedBy)
+                {answeredQuestions.map((question) => {
+
+                    const questionUser = users[question.author]
                     return <Card key={question.id} fluid className='content-color'>
                         <Card.Content>
                             {questionUser &&
                                 <Image
                                     floated='right'
                                     size='mini'
-                                    src={questionUser.image}
+                                    src={questionUser.avatarURL}
                                 />}
-                            <Card.Header>{question.addedBy} Ask ?</Card.Header>
-                            <Card.Meta><Moment format="YYYY/MM/DD">{question.addedDate}</Moment></Card.Meta>
+                            <Card.Header>{questionUser.name} Ask ?</Card.Header>
+                            <Card.Meta>
+                                <Moment format="YYYY/MM/DD">{question.timestamp}</Moment>
+                            </Card.Meta>
                             <Card.Description>
-                                would you rather <strong>{question.firstOption}</strong> or <strong>{question.secondOption}</strong>
+                                would you rather <strong>{question.optionOne.text}</strong> or <strong>{question.optionTwo.text}</strong>
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
-                            Your answer : {answer.answer === 'firstOption' ? question.firstOption : question.secondOption}
+                            Your answer : {user.answers[question.id] === 'optionOne' ? question.optionOne.text : question.optionTwo.text}
                         </Card.Content>
                     </Card>
                 })}
@@ -130,14 +135,21 @@ const Home = () => {
 
 
     const panes = [
-        { menuItem: 'Unanswered Questions', render: () => <Tab.Pane>{unansweredQuestions()}</Tab.Pane> },
-        { menuItem: 'Answered Questions', render: () => <Tab.Pane>{answeredQuestions()}</Tab.Pane> },
+        {
+            menuItem: 'Unanswered Questions', render: () => <Tab.Pane>{
+                unansweredQuestions()
+            }
+            </Tab.Pane>
+        },
+        {
+            menuItem: 'Answered Questions', render: () => <Tab.Pane>{
+                answeredQuestions()
+            }</Tab.Pane>
+        }
+
     ]
 
 
-    if (questions.length === 0) {
-        return <NoQuestions />
-    }
 
     return (
         <Segment className='content-color'>
@@ -164,15 +176,15 @@ const Home = () => {
                             <div style={{ margin: '10px 40px' }}>
                                 <Form>
                                     <Form.Radio
-                                        label={questionToAnswer.firstOption}
-                                        value='firstOption'
-                                        checked={selected === 'firstOption'}
+                                        label={questionToAnswer.optionOne.text}
+                                        value='optionOne'
+                                        checked={selected === 'optionOne'}
                                         onChange={(e, { value }) => handleSelect(value)}
                                     />
                                     <Form.Radio
-                                        label={questionToAnswer.secondOption}
-                                        value='secondOption'
-                                        checked={selected === 'secondOption'}
+                                        label={questionToAnswer.optionTwo.text}
+                                        value='optionTwo'
+                                        checked={selected === 'optionTwo'}
                                         onChange={(e, { value }) => handleSelect(value)}
                                     />
                                 </Form>
@@ -185,6 +197,8 @@ const Home = () => {
                         </Button>
                         <Button
                             onClick={() => answer()}
+
+                            loading={savingAnswer}
                             positive
                         >Submit</Button>
                     </Modal.Actions>
