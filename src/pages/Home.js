@@ -55,7 +55,7 @@ const Home = () => {
             {
                 remainingQuestions.map((question) => {
                     const questionUser = users[question.author]
-                    return <Card key={question.id} fluid className='content-color'>
+                    return <Card key={question.id} fluid  className='background-color'>
                         <Card.Content>
                             {questionUser &&
                                 <Image
@@ -65,13 +65,15 @@ const Home = () => {
                                 />
                             }
                             <Card.Header>{questionUser.name} Ask ?</Card.Header>
-                            <Card.Meta><Moment format="YYYY/MM/DD">{question.addedDate}</Moment></Card.Meta>
+                            <Card.Meta>
+                                <Moment format="YYYY/MM/DD">{question.timestamp}</Moment>
+                            </Card.Meta>
                             <Card.Description>
-                                would you rather <strong>{question.optionOne.text}</strong> or <strong>{question.optionTwo.text}</strong>
+                                would you rather <strong  style={{color:'#2185d0'}}>{question.optionOne.text}</strong> or <strong style={{color:'#90a500'}}>{question.optionTwo.text}</strong>
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
-                            <Button basic color='blue' fluid onClick={() => prepareToAnswer(question)}>
+                            <Button basic color='teal' fluid onClick={() => prepareToAnswer(question)}>
                                 Answer <Icon style={{ margin: '0 10px' }} name='check' />
                             </Button>
                         </Card.Content>
@@ -108,7 +110,7 @@ const Home = () => {
                 {answeredQuestions.map((question) => {
 
                     const questionUser = users[question.author]
-                    return <Card key={question.id} fluid className='content-color'>
+                    return <Card key={question.id} fluid  className='background-color'>
                         <Card.Content>
                             {questionUser &&
                                 <Image
@@ -121,7 +123,7 @@ const Home = () => {
                                 <Moment format="YYYY/MM/DD">{question.timestamp}</Moment>
                             </Card.Meta>
                             <Card.Description>
-                                would you rather <strong>{question.optionOne.text}</strong> or <strong>{question.optionTwo.text}</strong>
+                                would you rather <strong style={{color:'#2185d0'}}>{question.optionOne.text}</strong> or <strong style={{color:'#90a500'}}>{question.optionTwo.text}</strong>
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
@@ -136,13 +138,14 @@ const Home = () => {
 
     const panes = [
         {
-            menuItem: 'Unanswered Questions', render: () => <Tab.Pane>{
+            menuItem: 'Unanswered Questions', render: () => 
+            <Tab.Pane className='content-color'>{
                 unansweredQuestions()
             }
             </Tab.Pane>
         },
         {
-            menuItem: 'Answered Questions', render: () => <Tab.Pane>{
+            menuItem: 'Answered Questions', render: () => <Tab.Pane className='content-color'>{
                 answeredQuestions()
             }</Tab.Pane>
         }
@@ -155,13 +158,14 @@ const Home = () => {
         <Segment className='content-color'>
 
             <Header as='h2' style={{ marginTop: '10px' }}>
+                <Image src="/assets/images/question.png" size='medium' floated='left' />
                 Question Review
                 <Header.Subheader>
-                    review both answered or unanswered questions
+                    review both answered and unanswered questions
                 </Header.Subheader>
             </Header>
             <Divider />
-            <Tab menu={{ attached: 'top' }} panes={panes} className='background-color' />
+            <Tab menu={{ attached: 'top' , className:'content-color tabs'}} panes={panes}   />
             {questionToAnswer &&
                 <Modal
                     onClose={() => setShowModal(false)}
@@ -192,14 +196,14 @@ const Home = () => {
                         </Modal.Description>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button color='black' onClick={() => setShowModal(false)}>
+                        <Button color='red' onClick={() => setShowModal(false)}>
                             Cancel
                         </Button>
                         <Button
                             onClick={() => answer()}
-
+                            color='teal'
                             loading={savingAnswer}
-                            positive
+                            disabled={!selected}
                         >Submit</Button>
                     </Modal.Actions>
                 </Modal>

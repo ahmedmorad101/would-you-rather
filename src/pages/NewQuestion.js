@@ -24,9 +24,9 @@ const NewQuestion = () => {
     return (
         <Grid textAlign='center'>
             <Grid.Column textAlign='left' style={{ maxWidth: '500px' }}>
-                <Segment raised className='content-color'>
+                <Segment raised className='background-color'>
                     <Header as='h3' color='teal'>
-                        Create Your Question
+                        Add New Question
                     </Header>
                     <Divider />
                     <Form onValidSubmit={onValidSubmit}>
@@ -45,7 +45,7 @@ const NewQuestion = () => {
                             label="Option Two"
 
                         />
-                        <Button type='submit' color='blue' fluid loading={savingQuestion}>Save</Button>
+                        <Button type='submit' color='teal' fluid loading={savingQuestion}>Save</Button>
                     </Form>
                 </Segment>
             </Grid.Column>

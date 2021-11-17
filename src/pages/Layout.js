@@ -27,14 +27,14 @@ const Layout = () => {
             </Dimmer>
             <Menu fixed='top' style={{ backgroundColor: '#e9edc9' }}>
                 <Menu.Item header style={{ color: 'green' }} onClick={() => navigate("/")}>
-                    <Image src="/assets/images/buttons.png" style={{ width: '18px', height: '18px', margin: '0 10px' }} />    Would you rather
+                    <Image src="/assets/images/buttons.png" style={{ width: '18px', height: '18px', margin: '0 10px' , border:'1px solid lightyellow!important' }} />    Would you rather
                 </Menu.Item>
                 <Menu.Item
                     name='home'
                     active={location.pathname === '/home' || location.pathname === '/'}
                     onClick={() => navigate("/")}
                 />
-                <Menu.Item
+                <Menu.Item 
                     name='New Question'
                     active={location.pathname === '/new-question'}
                     onClick={() => navigate("/new-question")}

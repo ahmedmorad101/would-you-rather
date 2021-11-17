@@ -30,7 +30,7 @@ const Login = () => {
         <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: '400px' }}>
                 
-                <Segment raised loading={loadingUsers}>
+                <Segment raised loading={loadingUsers} className='background-color'>
                     <Header as='h3' color='teal'>
                         <div className='circle-image'>
                             <Image src="/assets/images/buttons.png" />

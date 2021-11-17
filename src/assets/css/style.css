@@ -1,6 +1,6 @@
 body {
     height: auto;
-    background-color: #fff;
+    background-color: #e9edc954;
 }
 
 .ui.divider {
@@ -14,13 +14,15 @@ body {
 }
 
 .content-color{
-    background-color: #fff!important;
+    background-color: #fcfdf5!important;
 }
 
-
+.tabs > .active.item{
+    background-color: #e9edc9!important;
+}
 
 .background-color{
-    background-color: #fff!important;
+    background-color: #fbfdec!important;
 }
 
 .background-color > .tab,.background-color > .menu{
@@ -47,4 +49,8 @@ body {
     display: inline-block;
     width: 20px;
     height: 20px;
+}
+
+.ui.cards>.card{
+    margin: 0.375em .5em!important;
 }
