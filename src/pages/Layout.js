@@ -32,15 +32,20 @@ const Layout = () => {
                 <Menu.Item
                     name='home'
                     active={location.pathname === '/home' || location.pathname === '/'}
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/home")}
                 />
                 <Menu.Item 
-                    name='New Question'
-                    active={location.pathname === '/new-question'}
-                    onClick={() => navigate("/new-question")}
+                    name='Add New Poll'
+                    active={location.pathname === '/add'}
+                    onClick={() => navigate("/add")}
                 />
                 <Menu.Item
-                    name='Leader Board'
+                    name='Questions'
+                    active={location.pathname === '/questions'}
+                    onClick={() => navigate("/questions")}
+                />
+                <Menu.Item
+                    name='Leaderboard'
                     active={location.pathname === '/leaderboard'}
                     onClick={() => navigate("/leaderboard")}
                 />

@@ -6,7 +6,7 @@ import * as _ from 'lodash'
 
 import Moment from 'react-moment'
 import { Form } from 'formsy-semantic-ui-react'
-import {  answerQuestionAsync } from '../store/actions'
+import { answerQuestionAsync } from '../store/actions'
 
 const Home = () => {
 
@@ -30,6 +30,8 @@ const Home = () => {
     }
 
     const answer = () => {
+        if (!selected) { return }
+
         dispatch(answerQuestionAsync(user.id, questionToAnswer.id, selected)).then(() => setShowModal(false))
 
 
@@ -55,7 +57,7 @@ const Home = () => {
             {
                 remainingQuestions.map((question) => {
                     const questionUser = users[question.author]
-                    return <Card key={question.id} fluid  className='background-color'>
+                    return <Card key={question.id} fluid className='background-color'>
                         <Card.Content>
                             {questionUser &&
                                 <Image
@@ -69,12 +71,12 @@ const Home = () => {
                                 <Moment format="YYYY/MM/DD">{question.timestamp}</Moment>
                             </Card.Meta>
                             <Card.Description>
-                                would you rather <strong  style={{color:'#2185d0'}}>{question.optionOne.text}</strong> or <strong style={{color:'#90a500'}}>{question.optionTwo.text}</strong>
+                                would you rather <strong style={{ color: '#2185d0' }}>{question.optionOne.text}</strong> or <strong style={{ color: '#90a500' }}>{question.optionTwo.text}</strong>
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
                             <Button basic color='teal' fluid onClick={() => prepareToAnswer(question)}>
-                                Answer <Icon style={{ margin: '0 10px' }} name='check' />
+                                Vote <Icon style={{ margin: '0 10px' }} name='check' />
                             </Button>
                         </Card.Content>
                     </Card>
@@ -110,7 +112,7 @@ const Home = () => {
                 {answeredQuestions.map((question) => {
 
                     const questionUser = users[question.author]
-                    return <Card key={question.id} fluid  className='background-color'>
+                    return <Card key={question.id} fluid className='background-color'>
                         <Card.Content>
                             {questionUser &&
                                 <Image
@@ -123,7 +125,7 @@ const Home = () => {
                                 <Moment format="YYYY/MM/DD">{question.timestamp}</Moment>
                             </Card.Meta>
                             <Card.Description>
-                                would you rather <strong style={{color:'#2185d0'}}>{question.optionOne.text}</strong> or <strong style={{color:'#90a500'}}>{question.optionTwo.text}</strong>
+                                would you rather <strong style={{ color: '#2185d0' }}>{question.optionOne.text}</strong> or <strong style={{ color: '#90a500' }}>{question.optionTwo.text}</strong>
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
@@ -138,11 +140,11 @@ const Home = () => {
 
     const panes = [
         {
-            menuItem: 'Unanswered Questions', render: () => 
-            <Tab.Pane className='content-color'>{
-                unansweredQuestions()
-            }
-            </Tab.Pane>
+            menuItem: 'Unanswered Questions', render: () =>
+                <Tab.Pane className='content-color'>{
+                    unansweredQuestions()
+                }
+                </Tab.Pane>
         },
         {
             menuItem: 'Answered Questions', render: () => <Tab.Pane className='content-color'>{
@@ -165,7 +167,7 @@ const Home = () => {
                 </Header.Subheader>
             </Header>
             <Divider />
-            <Tab menu={{ attached: 'top' , className:'content-color tabs'}} panes={panes}   />
+            <Tab menu={{ attached: 'top', className: 'content-color tabs' }} panes={panes} />
             {questionToAnswer &&
                 <Modal
                     onClose={() => setShowModal(false)}

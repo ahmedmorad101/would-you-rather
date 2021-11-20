@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import { Button, Select, Form, Grid, Header, Segment, Image } from 'semantic-ui-react'
 import { loadUsersAsync, login } from '../store/actions'
 
@@ -10,10 +10,12 @@ import { loadUsersAsync, login } from '../store/actions'
 
 const Login = () => {
     let navigate = useNavigate();
+    let location = useLocation()
     const [user, setUser] = useState()
     const dispatch = useDispatch()
     const loadingUsers = useSelector(state => state.loadingUsers)
     const users = useSelector(state => state.users)
+
 
 
     useEffect(() => {
@@ -24,12 +26,17 @@ const Login = () => {
         e.preventDefault()
         const _user = Object.values(users).find(u => u.id === user)
         dispatch(login(_user))
-        navigate("/")
+        if (location.state.from) {
+            navigate(location.state.from)
+        } else {
+            navigate("/home")
+        }
+
     }
     return (
         <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
             <Grid.Column style={{ maxWidth: '400px' }}>
-                
+
                 <Segment raised loading={loadingUsers} className='background-color'>
                     <Header as='h3' color='teal'>
                         <div className='circle-image'>
@@ -41,8 +48,8 @@ const Login = () => {
 
                     <Form onSubmit={doLogin}>
 
-                       
-                    <Form.Field
+
+                        <Form.Field
                             name='user'
                             value={user}
                             onChange={(e, { value }) => { setUser(value) }}

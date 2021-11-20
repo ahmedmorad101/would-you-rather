@@ -7,7 +7,7 @@ import NoQuestions from '../components/NoQuestions'
 import { toggleShowUsers } from '../store/actions'
 
 
-const LeaderBoard = () => {
+const Questions = () => {
     const questions = useSelector(state => state.questions)
     const currentUser = useSelector(state => state.user)
     const users = useSelector(state => state.users)
@@ -25,17 +25,17 @@ const LeaderBoard = () => {
         <Segment className='content-color'>
             <Header as='h2'>
                 <Grid divided>
-                <Grid.Row>
-                    <Grid.Column  verticalAlign='bottom'><Image src='/assets/images/podium.png' size='small' /></Grid.Column>
-                    <Grid.Column verticalAlign='bottom' width='10' >Leader Board</Grid.Column>
+                    <Grid.Row>
+                        <Grid.Column verticalAlign='bottom'><Image src='/assets/images/question.png' size='small' /></Grid.Column>
+                        <Grid.Column verticalAlign='bottom' width='10' >Questions</Grid.Column>
                     </Grid.Row>
                 </Grid>
-
+                <div style={{marginBottom:'10px'}}></div>
                 <Divider />
             </Header>
 
             <CardGroup >
-                {_.reverse(_.sortBy(Object.values(questions), (i) => i.optionOne.votes.length + i.optionTwo.votes.length)).map((question,idx) => {
+                {_.reverse(_.sortBy(Object.values(questions), (i) => i.optionOne.votes.length + i.optionTwo.votes.length)).map((question, idx) => {
                     const questionUser = users[question.author]
                     const firstOptionCount = question.optionOne.votes.length
                     const secondOptionCount = question.optionTwo.votes.length
@@ -53,17 +53,14 @@ const LeaderBoard = () => {
                                     src={questionUser.avatarURL}
                                 />
                             }
-                            <Card.Header> 
-                                {idx===0 && <Image src="/assets/images/one.png" size='mini' floated='left'/>}
-                                {idx===1 && <Image src="/assets/images/two.png" size='mini' floated='left'/>}
-                                {idx===2 && <Image src="/assets/images/three.png" size='mini' floated='left'/>}
+                            <Card.Header>
                                 {questionUser.name} Ask ?
                             </Card.Header>
                             <Card.Meta>
                                 <Moment format="YYYY/MM/DD">{question.timestamp}</Moment>
                             </Card.Meta>
                             <Card.Description>
-                                would you rather <strong style={{color:'#2185d0'}}>{question.optionOne.text}</strong> or <strong style={{color:'#90a500'}}>{question.optionTwo.text}</strong>
+                                would you rather <strong style={{ color: '#2185d0' }}>{question.optionOne.text}</strong> or <strong style={{ color: '#90a500' }}>{question.optionTwo.text}</strong>
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
@@ -115,4 +112,4 @@ const LeaderBoard = () => {
     )
 }
 
-export default LeaderBoard
+export default Questions

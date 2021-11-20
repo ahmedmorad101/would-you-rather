@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { saveQuestionAsync } from '../store/actions'
 import { useNavigate } from 'react-router'
 
-const NewQuestion = () => {
+const NewPoll = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const NewQuestion = () => {
             <Grid.Column textAlign='left' style={{ maxWidth: '500px' }}>
                 <Segment raised className='background-color'>
                     <Header as='h3' color='teal'>
-                        Add New Question
+                        Add New Poll
                     </Header>
                     <Divider />
                     <Form onValidSubmit={onValidSubmit}>
@@ -53,4 +53,4 @@ const NewQuestion = () => {
     )
 }
 
-export default NewQuestion
+export default NewPoll
