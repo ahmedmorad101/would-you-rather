@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Card, Divider, Header, Icon, Image, Message, Modal, Segment, Tab } from 'semantic-ui-react'
 import * as _ from 'lodash'
-
-
 import Moment from 'react-moment'
 import { Form } from 'formsy-semantic-ui-react'
 import { answerQuestionAsync } from '../store/actions'
+import {  NavLink, useNavigate, useLocation } from 'react-router-dom'
 
 const Home = () => {
 
@@ -14,11 +13,14 @@ const Home = () => {
     const user = useSelector((state) => state.user)
     const users = useSelector((state) => state.users)
     const savingAnswer = useSelector((state) => state.savingAnswer)
-
+    const location = useLocation()
     const [showModal, setShowModal] = useState(false)
     const [selected, setSelected] = useState()
     const dispatch = useDispatch()
     const [questionToAnswer, setQuestionToAnswer] = useState()
+    const [activeIndex, setActiveIndex] = useState(0)
+
+    const navigate = useNavigate()
     const handleSelect = (value) => {
         setSelected(value)
     }
@@ -66,7 +68,7 @@ const Home = () => {
                                     src={questionUser.avatarURL}
                                 />
                             }
-                            <Card.Header>{questionUser.name} Ask ?</Card.Header>
+                            <Card.Header>{questionUser.name} Ask  ? </Card.Header>
                             <Card.Meta>
                                 <Moment format="YYYY/MM/DD">{question.timestamp}</Moment>
                             </Card.Meta>
@@ -75,9 +77,16 @@ const Home = () => {
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
-                            <Button basic color='teal' fluid onClick={() => prepareToAnswer(question)}>
+                            <Button basic color='teal' onClick={() => prepareToAnswer(question)}>
                                 Vote <Icon style={{ margin: '0 10px' }} name='check' />
                             </Button>
+
+
+                            <Button basic floated='right' color='facebook' onClick={() => navigate(`/questions/${question.id}`)}>
+                                View Details <Icon style={{ margin: '0 10px' }} name='folder open outline' />
+                            </Button>
+
+                            
                         </Card.Content>
                     </Card>
                 }
@@ -120,7 +129,7 @@ const Home = () => {
                                     size='mini'
                                     src={questionUser.avatarURL}
                                 />}
-                            <Card.Header>{questionUser.name} Ask ?</Card.Header>
+                            <Card.Header>{questionUser.name} Ask ? </Card.Header>
                             <Card.Meta>
                                 <Moment format="YYYY/MM/DD">{question.timestamp}</Moment>
                             </Card.Meta>
@@ -130,6 +139,9 @@ const Home = () => {
                         </Card.Content>
                         <Card.Content extra>
                             Your answer : {user.answers[question.id] === 'optionOne' ? question.optionOne.text : question.optionTwo.text}
+
+
+                            <NavLink to={`/questions/${question.id}`} style={{ float: 'right' }}>View Details</NavLink>
                         </Card.Content>
                     </Card>
                 })}
@@ -154,7 +166,16 @@ const Home = () => {
 
     ]
 
+    const opentTab = (index) => {
+        navigate(`#${index}`, { replace: false })
+    }
 
+    if (location.hash === '#1' && activeIndex !== 1) {
+        setActiveIndex(1)
+    }
+    else if (location.hash === '#0' && activeIndex !== 0) {
+        setActiveIndex(0)
+    }
 
     return (
         <Segment className='content-color'>
@@ -167,7 +188,7 @@ const Home = () => {
                 </Header.Subheader>
             </Header>
             <Divider />
-            <Tab menu={{ attached: 'top', className: 'content-color tabs' }} panes={panes} />
+            <Tab menu={{ attached: 'top', className: 'content-color tabs' }} activeIndex={activeIndex} panes={panes} onTabChange={(e, { activeIndex }) => opentTab(activeIndex)} />
             {questionToAnswer &&
                 <Modal
                     onClose={() => setShowModal(false)}

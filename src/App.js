@@ -7,6 +7,7 @@ import NewPoll from "./pages/NewPoll";
 import RequiredAuth from "./pages/RequiredAuth";
 import NotFound from "./pages/NotFound";
 import Leaderboard from "./pages/Leaderboard";
+import Question from "./pages/Question";
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/add" element={<NewPoll />} />
           <Route path="/questions" element={<Questions />} />
+          <Route path="/questions/:question_id" element={<Question />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route index element={<Home />} />
           <Route path="*" element={<NotFound />} />
