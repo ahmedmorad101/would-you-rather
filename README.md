@@ -45,6 +45,17 @@ npm start
     └── types.js
 ```
 
-## Notes
+## Packages 
 
-this application created based on react
+- [Semantic UI React](https://react.semantic-ui.com/)
+    - installation :
+        `npm install semantic-ui-react semantic-ui-css`
+    - add the following line to index.js 
+        `import 'semantic-ui-css/semantic.min.css'`
+
+- [React Router](https://reactrouter.com/)
+    `npm install react-router-dom@6`
+    
+- [React Redux](https://react-redux.js.org/)
+
+
