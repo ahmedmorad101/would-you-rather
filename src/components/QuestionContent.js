@@ -45,6 +45,7 @@ const QuestionContent = (props) => {
         <Card.Content extra>
             <Progress percent={firstOptionPercent} progress label={question.optionOne.text} size='small' color='blue' />
             <Progress percent={secondOptionPercent} progress label={question.optionTwo.text} size='small' color='olive' />
+            Total answers : {totalCount}
             {totalCount > 0 &&
                 <Accordion fluid >
                     <Accordion.Title

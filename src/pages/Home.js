@@ -5,7 +5,7 @@ import * as _ from 'lodash'
 import Moment from 'react-moment'
 import { Form } from 'formsy-semantic-ui-react'
 import { answerQuestionAsync } from '../store/actions'
-import {  NavLink, useNavigate, useLocation } from 'react-router-dom'
+import { NavLink, useNavigate, useLocation } from 'react-router-dom'
 
 const Home = () => {
 
@@ -41,7 +41,7 @@ const Home = () => {
 
     const unansweredQuestions = () => {
         const userAnswers = Object.keys(user.answers)
-        const remainingQuestions = Object.values(questions).filter((item) => !_.includes(userAnswers, item.id))
+        const remainingQuestions = _.reverse(_.sortBy(Object.values(questions).filter((item) => !_.includes(userAnswers, item.id)), e => e.timestamp))
 
         if (questions.length !== 0 && remainingQuestions.length === 0) {
 
@@ -86,7 +86,7 @@ const Home = () => {
                                 View Details <Icon style={{ margin: '0 10px' }} name='folder open outline' />
                             </Button>
 
-                            
+
                         </Card.Content>
                     </Card>
                 }
@@ -102,7 +102,7 @@ const Home = () => {
 
         const userAnswers = Object.keys(user.answers)
 
-        const answeredQuestions = Object.values(questions).filter((item) => _.includes(Object.keys(user.answers), item.id))
+        const answeredQuestions = _.reverse(_.sortBy(Object.values(questions).filter((item) => _.includes(Object.keys(user.answers), item.id)), e => e.timestamp))
 
         if (questions && userAnswers.length === 0) {
 
@@ -145,6 +145,9 @@ const Home = () => {
                         </Card.Content>
                     </Card>
                 })}
+
+                <br/>
+            
             </Card.Group>
         )
     }
