@@ -55,7 +55,7 @@ npm start
 
 - [React Router](https://reactrouter.com/)
     `npm install react-router-dom@6`
-    
-- [React Redux](https://react-redux.js.org/)
 
+- [React Redux](https://react-redux.js.org/)
+    `npm install react-redux redux`
 
