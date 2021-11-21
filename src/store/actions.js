@@ -44,19 +44,22 @@ function loadQuestions(questions) {
     }
 }
 
-export const loadQuestionsAsync = () => (dispatch) => {
+export const loadQuestionsAsync = () => async (dispatch) => {
     dispatch({ type: types.LOADING_QUESTIONS })
-    API._getQuestions().then(res => dispatch(loadQuestions(res)))
+    const res = await API._getQuestions()
+    dispatch(loadQuestions(res))
 }
 
-export const answerQuestionAsync = (authedUser, qid, answer) => (dispatch) => {
+export const answerQuestionAsync = (authedUser, qid, answer) => async (dispatch) => {
     dispatch({ type: types.SAVING_ANSWER })
-    return API._saveQuestionAnswer({ authedUser, qid, answer })
-        .then(res => dispatch({ type: types.ANSWER_SAVED, payload: res }))
+    const res = await API._saveQuestionAnswer({ authedUser, qid, answer })
+    dispatch({ type: types.ANSWER_SAVED, payload: res })
 }
 
-export const saveQuestionAsync = ({optionOneText, optionTwoText, author}) => (dispatch) => {
+export const saveQuestionAsync = ({ optionOneText, optionTwoText }) => async (dispatch, getState) => {
+    const { user } = getState()
+    const author = user.id
     dispatch({ type: types.SAVING_QUESTION })
-    return API._saveQuestion({ optionOneText, optionTwoText, author })
-        .then(res => dispatch({ type: types.QUESTION_SAVED, payload: res }))
+    const res = await API._saveQuestion({ optionOneText, optionTwoText, author })
+    dispatch({ type: types.QUESTION_SAVED, payload: res })
 }

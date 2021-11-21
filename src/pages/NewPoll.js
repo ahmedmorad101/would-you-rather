@@ -11,11 +11,11 @@ const NewPoll = () => {
     const dispatch = useDispatch();
 
     const savingQuestion = useSelector(state => state.savingQuestion)
-    const user = useSelector(state => state.user)
+    
 
     const onValidSubmit = (formData) => {
 
-        let question = { author: user.id, optionOneText: formData.optionOneText, optionTwoText: formData.optionTwoText }
+        let question = { optionOneText: formData.optionOneText, optionTwoText: formData.optionTwoText }
 
         dispatch(saveQuestionAsync(question)).then(() => navigate("/"))
 
