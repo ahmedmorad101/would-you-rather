@@ -26,7 +26,7 @@ const Login = () => {
         e.preventDefault()
         const _user = Object.values(users).find(u => u.id === user)
         dispatch(login(_user))
-        if (location.state.from) {
+        if (location.state?.from) {
             navigate(location.state.from)
         } else {
             navigate("/home")
